@@ -81,7 +81,7 @@ class _HomeViewState extends State<HomeView> {
                 width: width,
                 child: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 23),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: ListView.builder(
                       itemCount: successState.products.length,
                       itemBuilder: (context, index) {
