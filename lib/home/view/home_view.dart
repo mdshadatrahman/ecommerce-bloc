@@ -1,5 +1,7 @@
 import 'package:ecommerce_bloc/cart/view/cart_view.dart';
 import 'package:ecommerce_bloc/home/bloc/home_bloc.dart';
+import 'package:ecommerce_bloc/home/view/components/product_tile_widget.dart';
+import 'package:ecommerce_bloc/main.dart';
 import 'package:ecommerce_bloc/wishlist/view/wishlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +23,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,
       listenWhen: (previous, current) => current is HomeActionState,
@@ -30,6 +34,20 @@ class _HomeViewState extends State<HomeView> {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const CartView()));
         } else if (state is HomeNavigateToWishlistPageActionState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const WishListView()));
+        } else if (state is ItemAddedToCartActionState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Item added to cart'),
+              showCloseIcon: true,
+            ),
+          );
+        } else if (state is ItemWishlistedActionState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Item added to wishlist'),
+              showCloseIcon: true,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -38,9 +56,11 @@ class _HomeViewState extends State<HomeView> {
             return const Scaffold(body: Center(child: CircularProgressIndicator(color: Colors.indigo)));
 
           case HomeLoadingSuccessState:
+            final successState = state as HomeLoadingSuccessState;
             return Scaffold(
               appBar: AppBar(
                 title: const Text('Groceryyy'),
+                backgroundColor: Colors.teal,
                 actions: [
                   IconButton(
                     onPressed: () {
@@ -55,6 +75,37 @@ class _HomeViewState extends State<HomeView> {
                     icon: const Icon(Icons.shopping_cart),
                   ),
                 ],
+              ),
+              body: SizedBox(
+                height: height,
+                width: width,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 23),
+                    child: ListView.builder(
+                      itemCount: successState.products.length,
+                      itemBuilder: (context, index) {
+                        return ProductTileWidget(
+                          product: successState.products[index],
+                          onAddToCartButtonClick: () {
+                            homeBloc.add(
+                              HomeProductCartButtonClickedEvent(
+                                productDataModel: successState.products[index],
+                              ),
+                            );
+                          },
+                          onAddToWishlistButtonClick: () {
+                            homeBloc.add(
+                              HomeProductWishlistButtonClickedEvent(
+                                productDataModel: successState.products[index],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
               ),
             );
 

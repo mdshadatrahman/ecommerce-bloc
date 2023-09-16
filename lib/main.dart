@@ -1,6 +1,8 @@
 import 'package:ecommerce_bloc/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 
+late double height;
+late double width;
 void main() {
   runApp(const MainApp());
 }
