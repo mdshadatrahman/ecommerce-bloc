@@ -34,10 +34,13 @@ class _CartViewState extends State<CartView> {
               return const Center(child: CircularProgressIndicator(color: Colors.indigo));
 
             case CartLoadingSuccessState:
-              return const Center(
-                child: Text(
-                  'Has Data',
-                  style: TextStyle(
+              final successState = state as CartLoadingSuccessState;
+              return ListView.builder(
+                itemCount: successState.cartItems.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) => Text(
+                  successState.cartItems[index].name,
+                  style: const TextStyle(
                     color: Colors.green,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
