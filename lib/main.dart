@@ -1,4 +1,4 @@
-import 'package:ecommerce_bloc/home/view/home.dart';
+import 'package:ecommerce_bloc/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: HomeView(),
     );
   }
 }
